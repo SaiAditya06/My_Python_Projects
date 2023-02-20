@@ -11,7 +11,7 @@ while True:
 
 for x in range(1,ask + 1):
     y = x
-    num = ask + 1
+    num = ask
     while True:
         if len(str(y)) != len(str(num)):
             y = "0" + str(y)
