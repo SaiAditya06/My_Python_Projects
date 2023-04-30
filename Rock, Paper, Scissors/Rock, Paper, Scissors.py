@@ -5,7 +5,7 @@ play_points = 0
 
 while play_points < 10 and com_points < 10:
     com = random.choice(["Rock", "Paper", "Scissors"])
-    play = input("What do you want Rock, Paper, Scissors: ")
+    play = input("Choose between Rock, Paper, Scissors: ")
 
     if play.upper() == com.upper():
         print("Tie - Both of you choose", play)
