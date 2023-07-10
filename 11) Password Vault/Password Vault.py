@@ -28,8 +28,8 @@ def create_master_key():
         print("Master key has been created")
 
 
-write_key()
 create_master_key()
+write_key()
 key = load_key()
 fernet = Fernet(key)
 MasterKey = getpass.getpass("Enter the Master Password: ")
