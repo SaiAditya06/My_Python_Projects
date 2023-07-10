@@ -8,7 +8,7 @@ print("Caution: If you stop the script it the middle of an action the (Title | U
 def write_key():
     key2 = Fernet.generate_key()
     with open("key.key","wb") as key_file:
-        with open("key2.txt","r") as key_file2:
+        with open("key2.txt","w") as key_file2:
             for x in key_file2.readlines():
                 y = x.strip()
                 key_file.write(key2 + y.encode())
@@ -28,7 +28,6 @@ def create_master_key():
         print("Master key has been created")
 
 
-#comment out line 32 and 33
 write_key()
 create_master_key()
 key = load_key()
