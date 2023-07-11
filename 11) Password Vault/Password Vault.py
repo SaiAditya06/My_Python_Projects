@@ -2,16 +2,13 @@ from cryptography.fernet import Fernet
 import getpass
 
 print("Welcome to Password Manager")
-print("Caution: If you stop the script it the middle of an action the (Title | Username | Password) will be deleted\n")
+print("Caution: If you stop the script it the middle of an action the (Title | Username | Password) might be deleted\n")
 
 
 def write_key():
     key2 = Fernet.generate_key()
     with open("key.key","wb") as key_file:
-        with open("key2.txt","w") as key_file2:
-            for x in key_file2.readlines():
-                y = x.strip()
-                key_file.write(key2 + y.encode())
+        key_file.write(key2)
 
 
 def load_key():
@@ -21,18 +18,20 @@ def load_key():
     return key2
 
 
+write_key()
+key = load_key()
+fernet = Fernet(key)
+
+
 def create_master_key():
     x = input("Create your Master Key: ")
     with open("master.txt","w") as file:
-        file.write(x)
+        file.write(fernet.encrypt(x.encode()).decode())
         print("Master key has been created")
 
 
 create_master_key()
-write_key()
-key = load_key()
-fernet = Fernet(key)
-MasterKey = getpass.getpass("Enter the Master Password: ")
+MasterKey = fernet.encrypt(getpass.getpass("Enter the Master Password: ").encode()).decode()
 
 
 def see():
@@ -82,24 +81,26 @@ def delete():
                     print("You have not typed [Yes,No]")
 
 
-if MasterKey in open("ksa.txt","r"):
-    while True:
-        ask = input(
-            "Would you like to add a new title/username/password or view existing ones or delete the existing ones (view,add,delete), type quit to quit: ").lower()
-        if ask == "":
-            print("sorry, you did not typed (view,add,delete,quit)")
-        elif ask[0].lower() == "q":
-            exit()
-        elif ask[0].lower() == "v":
-            see()
-        elif ask[0].lower() == "a":
-            add()
-        elif ask[0].lower() == "d":
-            delete()
-            continue
+with open("master.txt","r") as lines:
+    for z in lines.readlines():
+        if fernet.decrypt(MasterKey.encode()).decode() in fernet.decrypt(z.strip().encode()).decode():
+            while True:
+                ask = input(
+                    "Would you like to add a new title/username/password or view existing ones or delete the existing ones (view,add,delete), type quit to quit: ").lower()
+                if ask == "":
+                    print("sorry, you did not typed (view,add,delete,quit)")
+                elif ask[0].lower() == "q":
+                    exit()
+                elif ask[0].lower() == "v":
+                    see()
+                elif ask[0].lower() == "a":
+                    add()
+                elif ask[0].lower() == "d":
+                    delete()
+                    continue
+                else:
+                    print("sorry, you did not typed (view,add,delete,quit)")
+                    continue
         else:
-            print("sorry, you did not typed (view,add,delete,quit)")
-            continue
-else:
-    print("Incorrect password, session closed")
-    exit()
+            print("Incorrect password, session closed")
+            exit()
