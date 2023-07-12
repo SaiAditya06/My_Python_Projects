@@ -18,6 +18,7 @@ def load_key():
     return key2
 
 
+#please comment out 22 and 23 after the first run
 write_key()
 key = load_key()
 fernet = Fernet(key)
